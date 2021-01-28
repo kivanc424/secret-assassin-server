@@ -5,7 +5,6 @@ import com.example.secretassassin.repository.UserRepository;
 import io.fusionauth.jwt.Signer;
 import io.fusionauth.jwt.domain.JWT;
 import io.fusionauth.jwt.hmac.HMACSigner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.ZoneOffset;
@@ -17,8 +16,11 @@ import java.util.Map;
 @RestController
 public class UserController {
 
-    @Autowired
-    public UserRepository userRepository;
+    public final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping(value = "/all")
     public List<User> getAllUsers() {
@@ -37,15 +39,14 @@ public class UserController {
     @PostMapping(value = "/getUser")
     @CrossOrigin
     public User getUserInformation(@RequestBody User user) {
-        User foundUser = userRepository.findByUsername(user.getUsername());
 
-        return foundUser;
+        return userRepository.findByUsername(user.getUsername());
     }
 
 
     /**
      * Check if user password correct
-     * @param user
+     * @param user get user
      * @return jwt token if user is authenticated.
      */
     @PostMapping(value = "/login")
@@ -71,12 +72,11 @@ public class UserController {
             map.put("token", encodedJWT);
             map.put("username", foundUser.getUsername());
 
-            return map;
         }else {
             map.put("token", "Wrong password");
 
-            return map;
         }
+        return map;
     }
 
 }
