@@ -2,10 +2,9 @@ package com.example.secretassassin.controller;
 
 import com.example.secretassassin.model.CreateRoom;
 import com.example.secretassassin.repository.CreateRoomRepository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class CreateRoomController {
@@ -19,7 +18,13 @@ public class CreateRoomController {
     @PostMapping(value = "/create-room")
     @CrossOrigin
     public CreateRoom createRoom(@RequestBody CreateRoom createRoom) {
-
         return createRoomRepository.insert(createRoom);
+    }
+
+
+    @GetMapping(value = "/get-all-rooms")
+    @CrossOrigin
+    public List<CreateRoom> getAllRooms() {
+        return createRoomRepository.findAll();
     }
 }
