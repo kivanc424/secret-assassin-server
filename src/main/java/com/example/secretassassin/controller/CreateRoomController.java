@@ -2,6 +2,7 @@ package com.example.secretassassin.controller;
 
 import com.example.secretassassin.model.CreateRoom;
 import com.example.secretassassin.repository.CreateRoomRepository;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,17 +18,15 @@ public class CreateRoomController {
         this.createRoomRepository = createRoomRepository;
     }
 
-    @PostMapping(value = "/create-room")
-
+    @MessageMapping("/creategame-room")
+    @SendTo("/rooms/room-lists")
     public CreateRoom createRoom(@RequestBody CreateRoom createRoom) {
         return createRoomRepository.insert(createRoom);
     }
 
 
     @GetMapping(value = "/get-all-rooms")
-    @SendTo("/roomlists")
     public List<CreateRoom> getAllRooms() {
-
         return createRoomRepository.findAll();
     }
 }
