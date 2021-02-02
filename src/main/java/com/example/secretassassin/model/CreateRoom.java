@@ -1,7 +1,10 @@
 package com.example.secretassassin.model;
 
+import com.example.secretassassin.model.lobby.Players;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Document(collection = "rooms")
 public class CreateRoom {
@@ -15,8 +18,16 @@ public class CreateRoom {
     private boolean morgana;
     private boolean oberon;
     private boolean mordred;
+    private List<Players> players;
+    private int connectedPlayers;
 
-    public CreateRoom(String id, String roomName, String roomPassword, int totalPlayers, boolean percival, boolean merlin, boolean morgana, boolean oberon, boolean mordred) {
+    public CreateRoom() {
+    }
+
+    public CreateRoom(String id, String roomName, String roomPassword,
+                      int totalPlayers, boolean percival, boolean merlin,
+                      boolean morgana, boolean oberon, boolean mordred,
+                      List<Players> players, int connectedPlayers) {
         this.id = id;
         this.roomName = roomName;
         this.roomPassword = roomPassword;
@@ -26,6 +37,8 @@ public class CreateRoom {
         this.morgana = morgana;
         this.oberon = oberon;
         this.mordred = mordred;
+        this.players = players;
+        this.connectedPlayers = connectedPlayers;
     }
 
     public String getId() {
@@ -99,4 +112,22 @@ public class CreateRoom {
     public void setMordred(boolean mordred) {
         this.mordred = mordred;
     }
+
+    public List<Players> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Players> players) {
+        this.players = players;
+    }
+
+    public int getConnectedPlayers() {
+        return connectedPlayers;
+    }
+
+    public void setConnectedPlayers(int connectedPlayers) {
+        this.connectedPlayers = connectedPlayers;
+    }
 }
+
+
