@@ -70,6 +70,7 @@ public class UserController {
             String encodedJWT = JWT.getEncoder().encode(jwt, signer);
 
             map.put("token", encodedJWT);
+            map.put("id", foundUser.getId());
             map.put("username", foundUser.getUsername());
 
         }else {

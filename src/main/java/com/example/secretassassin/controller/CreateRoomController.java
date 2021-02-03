@@ -1,13 +1,12 @@
 package com.example.secretassassin.controller;
 
 import com.example.secretassassin.model.CreateRoom;
-import com.example.secretassassin.model.lobby.Players;
+import com.example.secretassassin.model.lobby.Player;
 import com.example.secretassassin.repository.CreateRoomRepository;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +20,31 @@ public class CreateRoomController {
         this.createRoomRepository = createRoomRepository;
     }
 
-    @MessageMapping("/creategame-room")
-    @SendTo("/rooms/room-lists")
+
+    @PostMapping("/create-game")
     public CreateRoom createRoom(@RequestBody CreateRoom createRoom) {
         return createRoomRepository.insert(createRoom);
     }
+
+    @PostMapping("/get-lobby")
+    public Optional<CreateRoom> getLobby(@RequestBody CreateRoom createRoom) {
+        return createRoomRepository.findById(createRoom.getId());
+    }
+
+
+
+    @MessageMapping("/lobby")
+    @SendTo("/rooms/join-lobby")
+    public Player joinLobby(@RequestBody Player player) {
+         Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
+         List<Player> playerList = room.get().getPlayers();
+         playerList.add(new Player(player.getId(), player.getLobbyId(), player.getUsername()));
+
+         createRoomRepository.save(room.get());
+
+        return player;
+    }
+
 
 
     @GetMapping(value = "/get-all-rooms")
@@ -34,12 +53,4 @@ public class CreateRoomController {
     }
 
 
-    @PostMapping("/join-lobby")
-    public Optional<CreateRoom> joinLobby(@RequestBody CreateRoom createRoom) {
-        Optional<CreateRoom> newPlayers = createRoomRepository.findById(createRoom.getId());
-        List<Players> allPlayers = newPlayers.get().getPlayers();
-        allPlayers.add(new Players("aa", "kivanc"));
-        createRoomRepository.save(newPlayers.get());
-        return newPlayers;
-    }
 }
