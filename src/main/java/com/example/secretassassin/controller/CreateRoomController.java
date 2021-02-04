@@ -46,6 +46,19 @@ public class CreateRoomController {
     }
 
 
+    @MessageMapping("/leave-lobby")
+    @SendTo("/rooms/leave-lobby")
+    public Player leaveLobby(@RequestBody Player player) {
+        Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
+        List<Player> playerList = room.get().getPlayers();
+        playerList.removeIf(playerIterator -> playerIterator.getId().equals(player.getId()));
+
+        createRoomRepository.save(room.get());
+
+        return player;
+    }
+
+
 
     @GetMapping(value = "/get-all-rooms")
     public List<CreateRoom> getAllRooms() {
