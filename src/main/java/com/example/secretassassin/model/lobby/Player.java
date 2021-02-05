@@ -4,11 +4,20 @@ public class Player {
     private String id;
     private String lobbyId;
     private String username;
+    private Boolean gameMaster;
 
     public Player(String id, String lobbyId, String username) {
         this.id = id;
         this.lobbyId = lobbyId;
         this.username = username;
+    }
+
+    public Boolean getGameMaster() {
+        return gameMaster;
+    }
+
+    public void setGameMaster(Boolean gameMaster) {
+        this.gameMaster = gameMaster;
     }
 
     public String getId() {

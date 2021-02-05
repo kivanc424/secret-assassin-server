@@ -27,8 +27,18 @@ public class CreateRoomController {
     }
 
     @PostMapping("/get-lobby")
-    public Optional<CreateRoom> getLobby(@RequestBody CreateRoom createRoom) {
-        return createRoomRepository.findById(createRoom.getId());
+    public Optional<CreateRoom> getLobby(@RequestBody Player player) {
+        Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
+        List<Player> players = room.get().getPlayers();
+
+        for (Player player1 : players) {
+            if (player1.getGameMaster()) {
+                player1.setLobbyId(player.getLobbyId());
+                createRoomRepository.save(room.get());
+            }
+        }
+
+        return room;
     }
 
 
