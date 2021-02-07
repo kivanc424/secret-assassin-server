@@ -5,11 +5,22 @@ public class Player {
     private String lobbyId;
     private String username;
     private Boolean gameMaster;
+    private String readyState;
 
-    public Player(String id, String lobbyId, String username) {
+    public Player(String id, String lobbyId, String username, Boolean gameMaster, String readyState) {
         this.id = id;
         this.lobbyId = lobbyId;
         this.username = username;
+        this.gameMaster = gameMaster;
+        this.readyState = readyState;
+    }
+
+    public String getReadyState() {
+        return readyState;
+    }
+
+    public void setReadyState(String readyState) {
+        this.readyState = readyState;
     }
 
     public Boolean getGameMaster() {

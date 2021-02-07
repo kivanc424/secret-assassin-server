@@ -26,19 +26,24 @@ public class CreateRoomController {
         return createRoomRepository.insert(createRoom);
     }
 
-    @PostMapping("/get-lobby")
-    public Optional<CreateRoom> getLobby(@RequestBody Player player) {
-        Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
-        List<Player> players = room.get().getPlayers();
+    @GetMapping("/get-lobby/{id}")
+    public Optional<CreateRoom> getLobby(@PathVariable String id) {
+        return createRoomRepository.findById(id);
+    }
 
-        for (Player player1 : players) {
-            if (player1.getGameMaster()) {
-                player1.setLobbyId(player.getLobbyId());
-                createRoomRepository.save(room.get());
+    @GetMapping("/get-player-information/{id}/{playerId}")
+    public Player getPlayerInformation(@PathVariable String id, @PathVariable String playerId) {
+        Optional<CreateRoom> room = createRoomRepository.findById(id);
+
+        List<Player> playerList = room.get().getPlayers();
+
+        for (Player player : playerList) {
+            if (player.getId().equals(playerId)) {
+                return player;
             }
         }
 
-        return room;
+        return null;
     }
 
 
@@ -48,7 +53,8 @@ public class CreateRoomController {
     public Player joinLobby(@RequestBody Player player) {
          Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
          List<Player> playerList = room.get().getPlayers();
-         playerList.add(new Player(player.getId(), player.getLobbyId(), player.getUsername()));
+         playerList.add(new Player(player.getId(), player.getLobbyId(),
+                 player.getUsername(), player.getGameMaster(), player.getReadyState()));
 
          createRoomRepository.save(room.get());
 
