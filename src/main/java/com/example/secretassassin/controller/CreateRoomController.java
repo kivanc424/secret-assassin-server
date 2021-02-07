@@ -74,6 +74,27 @@ public class CreateRoomController {
         return player;
     }
 
+    @MessageMapping("/ready")
+    @SendTo("/rooms/player-ready")
+    public Player playerReady(@RequestBody Player player) {
+        Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
+        List<Player> playerList = room.get().getPlayers();
+
+        Player editedPlayer = null;
+        for (Player playerIterator : playerList) {
+            if (playerIterator.getId().equals(player.getId())) {
+                playerIterator.setReadyState("ready");
+                editedPlayer = playerIterator;
+                break;
+            }
+        }
+
+        createRoomRepository.save(room.get());
+
+        return editedPlayer;
+    }
+
+
 
 
     @GetMapping(value = "/get-all-rooms")
