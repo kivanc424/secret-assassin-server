@@ -76,7 +76,7 @@ public class CreateRoomController {
 
     @MessageMapping("/ready")
     @SendTo("/rooms/player-ready")
-    public Player playerReady(@RequestBody Player player) {
+    public CreateRoom playerReady(@RequestBody Player player) {
         Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
         List<Player> playerList = room.get().getPlayers();
 
@@ -91,7 +91,7 @@ public class CreateRoomController {
 
         createRoomRepository.save(room.get());
 
-        return editedPlayer;
+        return room.get();
     }
 
 
