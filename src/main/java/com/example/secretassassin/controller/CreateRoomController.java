@@ -114,9 +114,7 @@ public class CreateRoomController {
         Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
         createRoomRepository.delete(room.get());
 
-
         return "Lobby was Destroyed";
-
     }
 
 
