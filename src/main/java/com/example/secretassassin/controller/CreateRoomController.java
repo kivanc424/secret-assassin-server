@@ -80,11 +80,9 @@ public class CreateRoomController {
         Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
         List<Player> playerList = room.get().getPlayers();
 
-        Player editedPlayer = null;
         for (Player playerIterator : playerList) {
             if (playerIterator.getId().equals(player.getId())) {
                 playerIterator.setReadyState("ready");
-                editedPlayer = playerIterator;
                 break;
             }
         }
@@ -92,6 +90,33 @@ public class CreateRoomController {
         createRoomRepository.save(room.get());
 
         return room.get();
+    }
+
+    @MessageMapping("/not-ready")
+    @SendTo("/rooms/player-not-ready")
+    public CreateRoom playerNotReady(@RequestBody Player player) {
+        Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
+        List<Player> playerList = room.get().getPlayers();
+
+        for (Player playerIterator : playerList) {
+            if (playerIterator.getId().equals(player.getId())) {
+                playerIterator.setReadyState("not ready");
+            }
+        }
+
+        return room.get();
+    }
+
+
+    @MessageMapping("/destroy-lobby")
+    @SendTo("/rooms/destroy-lobby")
+    public String destroyLobby(@RequestBody Player player) {
+        Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
+        createRoomRepository.delete(room.get());
+
+
+        return "Lobby was Destroyed";
+
     }
 
 
