@@ -108,6 +108,15 @@ public class CreateRoomController {
     }
 
 
+    @MessageMapping("/start-game")
+    @SendTo("/rooms/start-game")
+    public CreateRoom startGame(@RequestBody Player player) {
+        Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
+        //TODO implement start game function with giving out roles to player
+        return room.get();
+    }
+
+
     @MessageMapping("/destroy-lobby")
     @SendTo("/rooms/destroy-lobby")
     public String destroyLobby(@RequestBody Player player) {
