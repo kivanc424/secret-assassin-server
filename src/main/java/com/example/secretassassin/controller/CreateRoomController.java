@@ -54,7 +54,7 @@ public class CreateRoomController {
          Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
          List<Player> playerList = room.get().getPlayers();
          playerList.add(new Player(player.getId(), player.getLobbyId(),
-                 player.getUsername(), player.getGameMaster(), player.getReadyState()));
+                 player.getUsername(), player.getGameMaster(), player.getReadyState(), player.getRole()));
 
          createRoomRepository.save(room.get());
 
@@ -113,6 +113,17 @@ public class CreateRoomController {
     public CreateRoom startGame(@RequestBody Player player) {
         Optional<CreateRoom> room = createRoomRepository.findById(player.getLobbyId());
         //TODO implement start game function with giving out roles to player
+
+        List<Player> players = room.get().getPlayers();
+
+        String[] roles = {"Minion", "Minion", "Merlin", "Assassin", "Murderer"};
+
+        for (int i = 0; i < players.size(); i++) {
+            for (int j = 0; j < roles.length; j++) {
+                players.get(i).setRole(roles[i]);
+            }
+        }
+        createRoomRepository.save(room.get());
         return room.get();
     }
 
