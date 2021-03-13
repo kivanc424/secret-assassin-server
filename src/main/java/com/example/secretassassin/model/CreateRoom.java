@@ -1,5 +1,6 @@
 package com.example.secretassassin.model;
 
+import com.example.secretassassin.model.lobby.GameStatus;
 import com.example.secretassassin.model.lobby.Player;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,12 +20,17 @@ public class CreateRoom {
     private boolean oberon;
     private boolean mordred;
     private List<Player> players;
+    private GameStatus gameStatus;
+    private boolean gameStartStatus;
 
 
     public CreateRoom() {
     }
 
-    public CreateRoom(String id, String roomName, String roomPassword, int totalPlayers, boolean percival, boolean merlin, boolean morgana, boolean oberon, boolean mordred, List<Player> players) {
+    public CreateRoom(String id, String roomName, String roomPassword,
+                      int totalPlayers, boolean percival, boolean merlin, boolean morgana,
+                      boolean oberon, boolean mordred, List<Player> players, GameStatus gameStatus,
+                      Boolean gameStartStatus) {
         this.id = id;
         this.roomName = roomName;
         this.roomPassword = roomPassword;
@@ -35,7 +41,25 @@ public class CreateRoom {
         this.oberon = oberon;
         this.mordred = mordred;
         this.players = players;
+        this.gameStatus = gameStatus;
+        this.gameStartStatus = gameStartStatus;
 
+    }
+
+    public boolean isGameStartStatus() {
+        return gameStartStatus;
+    }
+
+    public void setGameStartStatus(boolean gameStartStatus) {
+        this.gameStartStatus = gameStartStatus;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     public List<Player> getPlayers() {
